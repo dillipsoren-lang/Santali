@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Santali Moj</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: red;
+      padding: 10px;
+    }
+    .navbar h1 {
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .navbar .icons {
+      display: flex;
+      gap: 15px;
+    }
+    .navbar .icons i {
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .content {
+      padding: 20px;
+    }
+    .collintreelistview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+    }
+    .collintreelistview img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <h1>Santali Moj</h1>
+  <div class="icons">
+    
+    <i class="fas fa-image"></i>
+    <i class="fas fa-video"></i>
+  </div>
+</div>
+
+<div class="content">
+  <div class="collintreelistview" id="collintreelistview"></div>
+</div>
+
+<script>
+  const baseId = 'appz0eMeMmikuWgak';
+  const apiToken = 'patheDcSkkEcSTZnS.d228cccc64c20fc907a9682a695414a3214a0a2a14ff3d1b170e855d6e148d36';
+  const tableName = 'ImageURL';
+  const columnName = 'ImageURL';
+
+  const fetchAirtableData = async () => {
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}?fields[]=${columnName}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${apiToken}`
+      }
+    });
+    const data = await response.json();
+    return data.records;
+  };
+
+  const loadImages = async () => {
+    const imageContainer = document.getElementById('collintreelistview');
+    const records = await fetchAirtableData();
+
+    records.forEach(record => {
+      const imgUrl = record.fields[columnName];
+      const imgElement = document.createElement('img');
+      imgElement.src = imgUrl;
+      imageContainer.appendChild(imgElement);
+    });
+  };
+
+  window.onload = loadImages;
+</script>
+
+</body>
+</html>
